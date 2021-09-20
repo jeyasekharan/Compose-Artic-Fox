@@ -6,10 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.starsystems.composearticfox.search.SearchActivityV2
 import com.starsystems.composearticfox.ui.theme.MyApplicationTheme
 
+@ExperimentalFoundationApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +35,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun MyScreenContent(names: List<String> = List(1000) {"Hello Android $it"}) {
     var counterState by remember {
@@ -120,13 +119,15 @@ fun StartThirdActivity() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun StartFourthActivity() {
     val context = LocalContext.current
     Button(modifier = Modifier.padding(10.dp), onClick = { context.startActivity(Intent(context, SearchActivityV2::class.java)) }) {
-        Text(text = "Fourth Activity")
+        Text(text = "Search Activity")
     }
 }
+
 @Composable
 fun NamesList(names: List<String>, modifier: Modifier = Modifier) {
     LazyColumn(modifier = modifier) {
@@ -171,6 +172,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     }
 }
 
+@ExperimentalFoundationApi
 @Preview(showSystemUi = true)
 @Composable
 fun DefaultPreview() {

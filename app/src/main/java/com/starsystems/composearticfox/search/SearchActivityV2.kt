@@ -8,9 +8,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.*
 
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -27,11 +32,12 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.starsystems.composearticfox.Greeting
 import com.starsystems.composearticfox.ui.theme.BlueDivider
 import com.starsystems.composearticfox.ui.theme.FoundationPrimary
 import com.starsystems.composearticfox.ui.theme.MyApplicationTheme
 
-
+@ExperimentalFoundationApi
 class SearchActivityV2 : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,9 +58,7 @@ class SearchActivityV2 : ComponentActivity() {
 
 
     /** The content of the screen */
-/*
-    @Preview(showBackground = true)
-*/
+    @ExperimentalFoundationApi
     @Preview(showSystemUi = true)
     @Composable
     fun ScreenContent() {
@@ -87,7 +91,7 @@ class SearchActivityV2 : ComponentActivity() {
     @Composable
     fun SearchBar() {
         var displaySearchTextField by remember {
-            mutableStateOf(true)
+            mutableStateOf(false)
         }
 
         if (displaySearchTextField) {
@@ -95,8 +99,7 @@ class SearchActivityV2 : ComponentActivity() {
             Row(modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    Log.e("displaySearch", "$displaySearchTextField")
-                    displaySearchTextField = !displaySearchTextField
+                    displaySearchTextField = false
 
                 }) {
                 TextField(
@@ -118,48 +121,64 @@ class SearchActivityV2 : ComponentActivity() {
                 )
             }
         } else {
-            SearchField2()
+            /** The layout for search textfield */
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    displaySearchTextField = true
+                }
+                .background(color = Color.White)) {
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .padding(start = 10.dp)
+                ) {
+                    Text(text = "Search", fontWeight = FontWeight.Companion.Bold, fontSize = 15.sp)
+                }
+
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .padding(end = 10.dp), horizontalAlignment = Alignment.End
+                ) {
+                    Icon(Icons.Filled.Search, "", tint = Color.Black)
+                }
+            }
         }
     }
 
 
-    @Composable
-    fun SearchField2() {
-        /** The layout for search textfield */
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color.White)) {
-            Column(
-                Modifier
-                    .weight(1f)
-                    .padding(start = 10.dp)) {
-                Text(text = "Search", fontWeight = FontWeight.Companion.Bold, fontSize = 15.sp)
-            }
-
-            Column(
-                Modifier
-                    .weight(1f)
-                    .padding(end = 10.dp), horizontalAlignment = Alignment.End) {
-                Icon(Icons.Filled.Search, "", tint = Color.Black)
-            }
-        }
-    }
-
-
+    @ExperimentalFoundationApi
     @Composable
     fun Content(innerPadding: PaddingValues) {
         Spacer(modifier = Modifier.padding(innerPadding))
-        ResultItem()
+        val names: List<String> = List(8) { "Name $it" }
+
+        Column(modifier = Modifier.padding(top = 10.dp)) {
+            LazyColumn {
+                stickyHeader {
+                    SectionHeader()
+                }
+
+                itemsIndexed(items = names) { index, name ->
+                    if (index > 3) {
+                        ResultItem(name)
+                    }
+                }
+
+            }
+        }
     }
+
 
     @Composable
     fun ResultItem(name: String = "Ramu", address: String = "Asarimar south strret") {
         Card(
             modifier = Modifier
-                .padding(10.dp)
+                .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                 .fillMaxWidth()
-                .background(color = Color(0xFFF3F4F6))
-        ) {
+                .background(color = Color(0xFFF3F4F6)))
+        {
             Column(
                 modifier = Modifier
                     .background(color = Color(0xFFF3F4F6))
@@ -174,6 +193,17 @@ class SearchActivityV2 : ComponentActivity() {
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(text = address, fontSize = 12.sp, color = Color(0xFF979797))
             }
+        }
+    }
+
+    // @Preview(showBackground = true)
+    @Composable
+    fun SectionHeader(name: String = "Estimate") {
+        Row {
+            BlueDivider(width = 5.dp, height = 25.dp, paddingValues = PaddingValues(10.dp))
+            Text(text = "Estimate", modifier = Modifier.padding(start = 0.dp).
+            align(alignment = Alignment.CenterVertically),
+            fontWeight = FontWeight.Bold)
         }
     }
 
