@@ -100,7 +100,6 @@ class SearchActivityV2 : ComponentActivity() {
                 .fillMaxSize()
                 .clickable {
                     displaySearchTextField = false
-
                 }) {
                 TextField(
                     colors = TextFieldDefaults.textFieldColors(
@@ -148,7 +147,6 @@ class SearchActivityV2 : ComponentActivity() {
     }
 
 
-    @ExperimentalFoundationApi
     @Composable
     fun Content(innerPadding: PaddingValues) {
         Spacer(modifier = Modifier.padding(innerPadding))
@@ -165,14 +163,13 @@ class SearchActivityV2 : ComponentActivity() {
                         ResultItem(name)
                     }
                 }
-
             }
         }
     }
 
 
     @Composable
-    fun ResultItem(name: String = "Ramu", address: String = "Asarimar south strret") {
+    fun ResultItem(name: String = "Ramu", address: String = "South street") {
         Card(
             modifier = Modifier
                 .padding(top = 10.dp, start = 10.dp, end = 10.dp)
